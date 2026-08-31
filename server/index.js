@@ -12,6 +12,7 @@ dotenv.config()
 const app = express()
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
+import interviewRouter from "./routes/interview.route.js";
 
 
 app.use(cors({
@@ -25,6 +26,7 @@ app.use(cookieParser())
 
 app.use("/api/auth" , authRouter)
 app.use("/api/user", userRouter)
+app.use("/api/interview" , interviewRouter)
 
 
 
