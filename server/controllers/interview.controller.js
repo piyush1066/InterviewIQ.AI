@@ -81,10 +81,9 @@ export const analyzeResume = async (req, res) => {
 
     }
 }
-
 export const generateQuestion = async (req, res) => {
     try {
-       
+
         let { role, experience, mode, projects, skills, resumeText } = req.body
 
         role = role?.trim();
@@ -167,7 +166,7 @@ skills, interview mode and resume.
         const aiResponse = await askai(messages);
 
         if (!aiResponse || !aiResponse.trim()) {
-            return re.status(500).json({ message: "AI returned empty response." });
+            return res.status(500).json({ message: "AI returned empty response." });
         }
 
         const questionsArray = aiResponse
@@ -176,8 +175,7 @@ skills, interview mode and resume.
             .filter(q => q.length > 0)
             .slice(0, 5);
 
-        if (questionsArray.length === 0) {
-            console.log(error)
+        if (questionsArray.length !== 5) {
             return res.status(500).json({ message: "AI failed to generate questions." });
         }
 
@@ -193,7 +191,7 @@ skills, interview mode and resume.
             questions: questionsArray.map((q, index) => ({
                 question: q,
                 difficulty: ["easy", "easy", "medium", "medium", "hard"][index],
-                timelimit: [60, 60, 90, 90, 120][index]
+                timeLimit: [60, 60, 90, 90, 120][index]
 
 
             }))
@@ -216,6 +214,16 @@ skills, interview mode and resume.
 export const submitAnswer = async (req, res) => {
     try {
         const { interviewId, questionIndex, answer, timeTaken } = req.body;
+        const interview = await Interview.findOne({ _id: interviewId, userId: req.userId });
+
+        if (!interview) {
+            return res.status(404).json({ message: "Interview not found." });
+        }
+
+        if (!Number.isInteger(questionIndex) || !interview.questions[questionIndex]) {
+            return res.status(400).json({ message: "Invalid question index." });
+        }
+
         const question = interview.questions[questionIndex];
 
         //if no answer
@@ -301,9 +309,12 @@ Answer: ${answer}
 
         const aiResponese = await askai(messages);
 
-        const parsed = JSON.parse(aiResponese);
+        const parsed = JSON.parse(
+            aiResponese.replace(/```json/g, "").replace(/```/g, "").trim()
+        );
 
         question.answer = answer;
+        question.feedback = parsed.feedback;
         question.confidence = parsed.confidence;
         question.communication = parsed.communication;
         question.correctness = parsed.correctness;
@@ -377,4 +388,62 @@ export const finishInterview = async (req, res) => {
             message: `Failed to finish Interview ${error}`
         });
     }
-}   
+}
+
+export const getMyInterviews = async (req, res) => {
+    try {
+        const interviews = await Interview.find({ userId: req.userId })
+            .sort({ createdAt: -1 })
+            .select("role experience mode finalScore status createdAt");
+
+        return res.status(200).json({ interviews });
+    } catch (error) {
+        return res.status(500).json({ message: `failed to find currentUser Interview ${error}` });
+    }
+};
+export const getInterviewReport = async (req, res) => {
+    try {
+        const interview = await Interview.findOne({
+            _id: req.params.id,
+            userId: req.userId
+        });
+
+        if (!interview) {
+            return res.status(404).json({ message: "Interview not found" });
+        }
+
+        const totalQuestions = interview.questions.length;
+
+        
+        let totalConfidence = 0;
+        let totalCommunication = 0;
+        let totalCorrectness = 0;
+
+        interview.questions.forEach((q) => {
+            totalConfidence += q.confidence || 0;
+            totalCommunication += q.communication || 0;
+            totalCorrectness += q.correctness || 0;
+        });
+
+       
+
+        const avgConfidence = totalQuestions ? totalConfidence / totalQuestions : 0;
+
+        const avgCommunication = totalQuestions ? totalCommunication / totalQuestions : 0;
+
+        const avgCorrectness = totalQuestions ? totalCorrectness / totalQuestions : 0;
+
+        return res.json({
+            report: {
+                finalScore: Number((interview.finalScore || 0).toFixed(1)),
+                confidence: Number(avgConfidence.toFixed(1)),
+                communication: Number(avgCommunication.toFixed(1)),
+                correctness: Number(avgCorrectness.toFixed(1)),
+                questionWiseScore: interview.questions
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ message: `failed to find current user interview: ${error.message}` });
+    }
+};
+

@@ -8,7 +8,7 @@ const questionsSchema = new mongoose.Schema({
     answer: String,
     feedback: String,
     score: { type: Number, default: 0 },
-    confidense: { type: Number, default: 0 },
+    confidence: { type: Number, default: 0 },
     communication: { type: Number, default: 0 },
     correctness: { type: Number, default: 0 }
 })
