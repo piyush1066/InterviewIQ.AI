@@ -14,7 +14,7 @@ import axios from "axios"
 
 
 function Step1SetUp({ onStart }) {
-  const ServerUrl = "http://localhost:8000";
+  const ServerUrl = import.meta.env.VITE_SERVER_URL;;
   const {userData} = useSelector((state)=>state.user)
   const dispatch = useDispatch()
   const [role, setRole] = useState("");
