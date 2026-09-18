@@ -15,7 +15,7 @@ import { FaMicrophoneSlash } from 'react-icons/fa'
 
 function Step2Interview({ interviewData, onFinish: onFinish }) {
 
-  const ServerUrl = "http://localhost:8000";
+  const ServerUrl = "https://interviewiq-ai-fgh9.onrender.com";
   const { interviewId, questions, userName } = interviewData
   const [answer, setAnswer] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
