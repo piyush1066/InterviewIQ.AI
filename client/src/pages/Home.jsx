@@ -9,17 +9,15 @@ import AuthModel from '../components/AuthModel'
 import {
   BsRobot,
   BsMic,
-  BsClock,
   BsBarChart,
   BsFileEarmarkText,
-  BsModem,
 
 } from "react-icons/bs";
 import { HiSparkles } from "react-icons/hi"
-import evalImg from "../assets/evalImg.png";
+import evalImg from "../assets/ai-ans.png";
 import resumeImg from "../assets/resumeImg.png";
-import pdfImg from "../assets/pdfImg.png";
-import analyticsImg from "../assets/analyticsImg.png";
+import pdfImg from "../assets/pdf.png";
+import analyticsImg from "../assets/history.png";
 import credit from "../assets/credit.png";
 import HR from "../assets/HR.png";
 import tech from "../assets/tech.png";

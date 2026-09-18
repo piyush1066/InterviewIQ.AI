@@ -1,4 +1,3 @@
-console.log("🔥 INDEX.JS STARTED");
 import dns from "node:dns";
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 import express from "express"
@@ -11,6 +10,7 @@ const app = express()
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import interviewRouter from "./routes/interview.route.js";
+import paymentRouter from "./routes/payment.route.js";
 
 app.use((req, res, next) => {
     console.log("REQUEST:", req.method, req.url);
@@ -26,15 +26,10 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
-app.get("/test", (req, res) => {
-    console.log("🔥 TEST ROUTE HIT");
-    res.send("Server is working");
-});
-
 app.use("/api/auth" , authRouter)
 app.use("/api/user", userRouter)
 app.use("/api/interview" , interviewRouter)
-
+app.use("/api/payment", paymentRouter)
 
 
 
