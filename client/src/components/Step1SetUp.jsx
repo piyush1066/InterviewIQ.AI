@@ -54,6 +54,10 @@ function Step1SetUp({ onStart }) {
       setResumeText(result.data.resumeText || "")
       setAnalysisDone(true);
     } catch (error) {
+      console.log("🔥 RESUME UPLOAD ERROR:", error);
+      console.log("🔥 RESPONSE:", error.response?.data);
+      console.log("🔥 STATUS:", error.response?.status);
+      console.log("🔥 REQUEST URL:", error.config?.url);
       console.log(error);
       setAnalysisDone(false)
       setUploadError(error.response?.data?.message || "Resume analysis failed. Please try again.")
@@ -224,7 +228,7 @@ function Step1SetUp({ onStart }) {
                     {analyzing ? "Analyzing..." : "Analyze Resume"}
                   </button>
                 )}
-                
+
                 {uploadError && (
                   <p className='mt-3 text-sm font-medium text-red-600'>
                     {uploadError}
