@@ -44,7 +44,7 @@ function Step1SetUp({ onStart }) {
 
     try {
       alert("Server URL:\n" + ServerUrl);
-      const result = await axios.post(ServerUrl + "/api/interview/resume", formdata, { withCredentials: true })
+      const result = await axios.post(ServerUrl + "/api/interview/resume", formdata)
 
       console.log(result.data)
 
