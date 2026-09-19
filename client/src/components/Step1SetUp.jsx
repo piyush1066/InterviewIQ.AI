@@ -54,13 +54,18 @@ function Step1SetUp({ onStart }) {
       setResumeText(result.data.resumeText || "")
       setAnalysisDone(true);
     } catch (error) {
-      alert(
-        `URL: ${error.config?.url || "unknown"}\n` +
-        `Message: ${error.message}`
+      alert(error.message);
+
+      console.log("FULL ERROR:", error);
+      console.log("URL:", error.config?.url);
+      console.log("MESSAGE:", error.message);
+      console.log("RESPONSE:", error.response);
+
+      setAnalysisDone(false);
+      setUploadError(
+        error.response?.data?.message ||
+        "Resume analysis failed. Please try again."
       );
-      console.log(error);
-      setAnalysisDone(false)
-      setUploadError(error.response?.data?.message || "Resume analysis failed. Please try again.")
 
     } finally {
       setAnalyzing(false);
