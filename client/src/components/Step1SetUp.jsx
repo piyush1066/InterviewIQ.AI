@@ -29,17 +29,14 @@ function Step1SetUp({ onStart }) {
   const [analysisDone, setAnalysisDone] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const openResumePicker = (e) => {
-    if (e.target.closest("button")) return;
-    document.getElementById("resumeUpload")?.click();
-  }
+  const [uploadError, setUploadError] = useState("");
 
   const handleUploadResume = async () => {
     console.log("🔥 HANDLE UPLOAD RESUME CALLED");
     if (!resumeFile || analyzing) return;
 
     console.log("✅ Starting upload");
+    setUploadError("")
     setAnalyzing(true)
 
     const formdata = new FormData()
@@ -59,10 +56,17 @@ function Step1SetUp({ onStart }) {
     } catch (error) {
       console.log(error);
       setAnalysisDone(false)
+      setUploadError(error.response?.data?.message || "Resume analysis failed. Please try again.")
 
     } finally {
       setAnalyzing(false);
     }
+  }
+
+  const handleAnalyzeResumeClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleUploadResume();
   }
 
   const handleStart = async () => {
@@ -189,7 +193,10 @@ function Step1SetUp({ onStart }) {
                   accept='application/pdf'
                   id='resumeUpload'
                   className='hidden'
-                  onChange={(e) => setResumeFile(e.target.files[0])}
+                  onChange={(e) => {
+                    setResumeFile(e.target.files[0])
+                    setUploadError("")
+                  }}
                 />
 
                 <label
@@ -207,11 +214,20 @@ function Step1SetUp({ onStart }) {
                   <button
                     type="button"
                     disabled={analyzing}
-                    onClick={handleUploadResume}
-                    className="mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed"
+                    onClick={() => {
+                      alert("BUTTON CLICKED");
+                      console.log("BUTTON CLICKED");
+                    }}
+                    className="mt-4 bg-gray-900 text-white px-5 py-3 rounded-lg touch-manipulation relative z-50"
                   >
-                    {analyzing ? "Analyzing..." : "Analyze Resume"}
+                    Analyze Resume
                   </button>
+                )}
+
+                {uploadError && (
+                  <p className='mt-3 text-sm font-medium text-red-600'>
+                    {uploadError}
+                  </p>
                 )}
               </motion.div>
             )}
