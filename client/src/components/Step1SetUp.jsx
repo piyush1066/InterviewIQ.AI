@@ -29,7 +29,12 @@ function Step1SetUp({ onStart }) {
   const [analyzing, setAnalyzing] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleUploadResume = async (params) => {
+  const openResumePicker = (e) => {
+    if (e.target.closest("button")) return;
+    document.getElementById("resumeUpload")?.click();
+  }
+
+  const handleUploadResume = async () => {
     if (!resumeFile || analyzing) return;
     setAnalyzing(true)
 
@@ -171,7 +176,7 @@ function Step1SetUp({ onStart }) {
             {!analysisDone && (
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                onClick={() => document.getElementById("resumeUpload").click()}
+                onClick={openResumePicker}
                 className='border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition'>
                 <FaFileUpload className='text-4xl mx-auto text-green-600 mb-3' />
 
@@ -187,13 +192,17 @@ function Step1SetUp({ onStart }) {
 
                 {resumeFile && (
                   <motion.button
+                    type='button'
                     whileHover={{ scale: 1.02 }}
+                    disabled={analyzing}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleUploadResume()
                     }}
 
-                    className='mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition'>
+                    className='mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed'>
                     {analyzing ? "Analyzing..." : "Analyze Resume"}
                   </motion.button>
                 )}
