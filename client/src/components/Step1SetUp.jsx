@@ -213,17 +213,16 @@ function Step1SetUp({ onStart }) {
                 {resumeFile && (
                   <button
                     type="button"
-                    disabled={analyzing}
-                    onClick={() => {
-                      alert("BUTTON CLICKED");
-                      console.log("BUTTON CLICKED");
+                    onClick={() => alert("TEST")}
+                    className="mt-4 bg-gray-900 text-white px-6 py-3 rounded-lg relative z-[9999]"
+                    style={{
+                      pointerEvents: "auto",
+                      touchAction: "manipulation"
                     }}
-                    className="mt-4 bg-gray-900 text-white px-5 py-3 rounded-lg touch-manipulation relative z-50"
                   >
-                    Analyze Resume
+                    TEST ANALYZE
                   </button>
                 )}
-
                 {uploadError && (
                   <p className='mt-3 text-sm font-medium text-red-600'>
                     {uploadError}
