@@ -204,22 +204,14 @@ function Step1SetUp({ onStart }) {
                 </label>
 
                 {resumeFile && (
-                  <motion.button
-                    type='button'
-                    whileHover={{ scale: 1.02 }}
+                  <button
+                    type="button"
                     disabled={analyzing}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onTouchStart={(e) => e.stopPropagation()}
-                    onClick={(e) => {
-                      console.log("🔥 BUTTON CLICKED");
-                      alert("Analyze button clicked");
-                      e.stopPropagation();
-                      handleUploadResume()
-                    }}
-                    className='mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed'
+                    onClick={handleUploadResume}
+                    className="mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {analyzing ? "Analyzing..." : "Analyze Resume"}
-                  </motion.button>
+                  </button>
                 )}
               </motion.div>
             )}
