@@ -93,10 +93,7 @@ export const verifyPayment = async (req, res) => {
 
 
     } catch (error) {
-        console.log("🔥 VERIFY PAYMENT ERROR");
-        console.log(error);
-        console.log(error.message);
-        console.log(error.stack);
+       
         return res.status(500).json({ message: `failed to get current user ${error}` })
     }
 }

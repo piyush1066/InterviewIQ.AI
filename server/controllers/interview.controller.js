@@ -3,6 +3,7 @@ import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { askai } from "../services/openRouter.service.js";
 import User from "../models/user.model.js"
 import Interview from "../models/interview.model.js";
+import path from "path";
 
 export const analyzeResume = async (req, res) => {
     try {
@@ -21,7 +22,6 @@ export const analyzeResume = async (req, res) => {
                 "node_modules/pdfjs-dist/standard_fonts/"
             )
         }).promise;
-
         let resumeText = "";
 
         //Extract text from all pages 
@@ -420,7 +420,7 @@ export const getInterviewReport = async (req, res) => {
 
         const totalQuestions = interview.questions.length;
 
-        
+
         let totalConfidence = 0;
         let totalCommunication = 0;
         let totalCorrectness = 0;
@@ -431,7 +431,7 @@ export const getInterviewReport = async (req, res) => {
             totalCorrectness += q.correctness || 0;
         });
 
-       
+
 
         const avgConfidence = totalQuestions ? totalConfidence / totalQuestions : 0;
 

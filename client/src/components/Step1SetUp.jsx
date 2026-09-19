@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from "motion/react"
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userScile";
 import {
@@ -15,7 +15,7 @@ import axios from "axios"
 
 function Step1SetUp({ onStart }) {
   const ServerUrl = import.meta.env.VITE_SERVER_URL;;
-  const {userData} = useSelector((state)=>state.user)
+  const { userData } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const [role, setRole] = useState("");
   const [experience, setExperience] = useState("");
@@ -35,7 +35,10 @@ function Step1SetUp({ onStart }) {
   }
 
   const handleUploadResume = async () => {
+    console.log("🔥 HANDLE UPLOAD RESUME CALLED");
     if (!resumeFile || analyzing) return;
+
+    console.log("✅ Starting upload");
     setAnalyzing(true)
 
     const formdata = new FormData()
@@ -65,11 +68,11 @@ function Step1SetUp({ onStart }) {
     setLoading(true)
     setErrorMessage("")
     try {
-      const result = await axios.post(ServerUrl + "/api/interview/generate-questions", {role, experience, skills, projects, mode, resumeText} , {withCredentials:true});
+      const result = await axios.post(ServerUrl + "/api/interview/generate-questions", { role, experience, skills, projects, mode, resumeText }, { withCredentials: true });
       console.log(result.data)
 
-      if(userData){
-        dispatch(setUserData({...userData, credits:result.data.creditsLeft}))
+      if (userData) {
+        dispatch(setUserData({ ...userData, credits: result.data.creditsLeft }))
       }
       setLoading(false)
       onStart(result.data)
@@ -176,19 +179,28 @@ function Step1SetUp({ onStart }) {
             {!analysisDone && (
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                onClick={openResumePicker}
-                className='border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition'>
+                className='border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-green-500 hover:bg-green-50 transition'
+              >
                 <FaFileUpload className='text-4xl mx-auto text-green-600 mb-3' />
 
-                <input type="file"
+                <input
+                  type='file'
                   accept='application/pdf'
                   id='resumeUpload'
                   className='hidden'
                   onChange={(e) => setResumeFile(e.target.files[0])}
                 />
-                <p className='text-gray-600 font-medium'>
-                  {resumeFile ? resumeFile.name : "Click to upload resume (Optional)"}
-                </p>
+
+                <label
+                  htmlFor='resumeUpload'
+                  className='cursor-pointer'
+                >
+                  <p className='text-gray-600 font-medium'>
+                    {resumeFile
+                      ? resumeFile.name
+                      : "Click to upload resume (Optional)"}
+                  </p>
+                </label>
 
                 {resumeFile && (
                   <motion.button
@@ -203,13 +215,11 @@ function Step1SetUp({ onStart }) {
                       e.stopPropagation();
                       handleUploadResume()
                     }}
-
-                    className='mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed'>
+                    className='mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-70 disabled:cursor-not-allowed'
+                  >
                     {analyzing ? "Analyzing..." : "Analyze Resume"}
                   </motion.button>
                 )}
-
-
               </motion.div>
             )}
 
@@ -259,12 +269,12 @@ function Step1SetUp({ onStart }) {
             )}
 
             <motion.button
-            onClick={handleStart}
+              onClick={handleStart}
               disabled={!role || !experience || loading}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
               className='w-full disabled:bg-gray-600 bg-green-600 hover:bg-green-700 text-white py-3 rounded-full text-lg font-semibold transition duration-300 shadow-md'>
-              {loading? "Starting..." : "Start Interview"}
+              {loading ? "Starting..." : "Start Interview"}
             </motion.button>
 
           </div>
