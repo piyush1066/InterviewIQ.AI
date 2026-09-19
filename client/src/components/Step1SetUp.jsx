@@ -198,6 +198,7 @@ function Step1SetUp({ onStart }) {
                     onPointerDown={(e) => e.stopPropagation()}
                     onTouchStart={(e) => e.stopPropagation()}
                     onClick={(e) => {
+                      console.log("🔥 BUTTON CLICKED");
                       e.stopPropagation();
                       handleUploadResume()
                     }}
