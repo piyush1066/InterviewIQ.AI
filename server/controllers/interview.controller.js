@@ -14,7 +14,13 @@ export const analyzeResume = async (req, res) => {
         const fileBuffer = await fs.promises.readFile(filepath)
         const uint8Array = new Uint8Array(fileBuffer)
 
-        const pdf = await pdfjsLib.getDocument({ data: uint8Array }).promise;
+        const pdf = await pdfjsLib.getDocument({
+            data: uint8Array,
+            standardFontDataUrl: path.join(
+                process.cwd(),
+                "node_modules/pdfjs-dist/standard_fonts/"
+            )
+        }).promise;
 
         let resumeText = "";
 
