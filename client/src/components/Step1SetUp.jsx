@@ -54,10 +54,7 @@ function Step1SetUp({ onStart }) {
       setResumeText(result.data.resumeText || "")
       setAnalysisDone(true);
     } catch (error) {
-      console.log("🔥 RESUME UPLOAD ERROR:", error);
-      console.log("🔥 RESPONSE:", error.response?.data);
-      console.log("🔥 STATUS:", error.response?.status);
-      console.log("🔥 REQUEST URL:", error.config?.url);
+      alert(`Upload failed: ${error.response?.status || "No response"}`);
       console.log(error);
       setAnalysisDone(false)
       setUploadError(error.response?.data?.message || "Resume analysis failed. Please try again.")
