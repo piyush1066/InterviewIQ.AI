@@ -18,15 +18,9 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5174",
-        "http://127.0.0.1:5174",
-        "https://interviewiq-ai-1-client-ww5q.onrender.com"
-    ],
+    origin: "https://interviewiq-ai-1-client-ww5q.onrender.com",
     credentials: true
-}))
+}));
 
 
 app.use(express.json())
