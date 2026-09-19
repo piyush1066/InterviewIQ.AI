@@ -43,6 +43,7 @@ function Step1SetUp({ onStart }) {
     formdata.append("resume", resumeFile)
 
     try {
+      alert("Server URL:\n" + ServerUrl);
       const result = await axios.post(ServerUrl + "/api/interview/resume", formdata, { withCredentials: true })
 
       console.log(result.data)
@@ -59,7 +60,6 @@ function Step1SetUp({ onStart }) {
       console.log("FULL ERROR:", error);
       console.log("URL:", error.config?.url);
       console.log("MESSAGE:", error.message);
-      console.log("RESPONSE:", error.response);
 
       setAnalysisDone(false);
       setUploadError(
