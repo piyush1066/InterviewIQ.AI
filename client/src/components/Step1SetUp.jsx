@@ -199,6 +199,7 @@ function Step1SetUp({ onStart }) {
                     onTouchStart={(e) => e.stopPropagation()}
                     onClick={(e) => {
                       console.log("🔥 BUTTON CLICKED");
+                      alert("Analyze button clicked");
                       e.stopPropagation();
                       handleUploadResume()
                     }}
